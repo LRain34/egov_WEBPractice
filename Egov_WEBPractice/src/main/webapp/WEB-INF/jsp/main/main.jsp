@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-    웹페이지 123<br/>
+	나의웹페이지<br/>
+	웹페이지본문
+	${serverId}
 </body>
 </html>

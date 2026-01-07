@@ -17,16 +17,18 @@ package egovframework.example.sample.service.impl;
 
 import java.util.List;
 
-import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import org.egovframe.rte.fdl.idgnr.EgovIdGnrService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
 import egovframework.example.sample.service.EgovSampleService;
 import egovframework.example.sample.service.SampleDefaultVO;
 import egovframework.example.sample.service.SampleVO;
-import lombok.RequiredArgsConstructor;
+
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.egovframe.rte.fdl.idgnr.EgovIdGnrService;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * @Class Name : EgovSampleServiceImpl.java
@@ -45,17 +47,22 @@ import lombok.RequiredArgsConstructor;
  *  Copyright (C) by MOPAS All right reserved.
  */
 
-@Service
-@RequiredArgsConstructor
+@Service("sampleService")
 public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements EgovSampleService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovSampleServiceImpl.class);
 
 	/** SampleDAO */
-	private final SampleMapper sampleDAO;
+	// TODO ibatis 사용
+	@Resource(name = "sampleDAO")
+	private SampleDAO sampleDAO;
+	// TODO mybatis 사용
+	//  @Resource(name="sampleMapper")
+	//	private SampleMapper sampleDAO;
 
 	/** ID Generation */
-	private final EgovIdGnrService egovIdGnrService;
+	@Resource(name = "egovIdGnrService")
+	private EgovIdGnrService egovIdGnrService;
 
 	/**
 	 * 글을 등록한다.

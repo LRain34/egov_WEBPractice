@@ -9,7 +9,7 @@
 <body>
 	<form action="main3.do" method="post">
 		<input type="hidden" name="userNo" value="10">
-		<input type="text" name="id" >
+		<input type="text" name="id">
 		<input type="password" name="pw">
 		<input type="submit" value="제출">
 	</form>
