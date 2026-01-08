@@ -8,4 +8,17 @@
 	FROM TBL_USER
 	WHERE USERID='testt'
 	</select>
+	<select id="checkLogin" statementType="CALLABLE" parameterType="java.util.HashMap">
+	    { call SP_MYPROC(
+	        #{IN_USERID, mode=IN, jdbcType=VARCHAR},
+	        #{IN_USERPW, mode=IN, jdbcType=VARCHAR},
+	        #{OUT_STATE, mode=OUT, jdbcType=INTEGER},
+	        #{REF_CURSOR, mode=OUT, jdbcType=CURSOR, resultMap=userResultMap}
+	    )}
+	</select>
+	
+	<resultMap id="userResultMap" type="java.util.HashMap">
+	    <result column="USERID" property="USERID"/>
+	    <result column="USERPW" property="USERPW"/>
+	</resultMap>
 </mapper>

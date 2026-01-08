@@ -77,4 +77,42 @@ public class MainController {
 		return "main/main";
 	}
 	
+	@RequestMapping(value="/login.do")
+	public String login(HttpServletRequest request,ModelMap model)
+	{
+		
+		return "login/login";
+	}
+	
+	@RequestMapping(value="/loginSubmission.do")
+	public String loginSubmission(HttpServletRequest request,ModelMap model)
+	{
+		HashMap<String,Object> resultMap = new HashMap<String,Object>();
+		try {
+			resultMap= mainService.checkLogin(request);
+			// 로그인 상태 유지를 위한 세션 얻기
+			request.getSession().setAttribute("myid", resultMap.get("USERID").toString());
+			model.addAttribute("serverId", resultMap.get("USERID").toString());
+		} catch (Exception e) {
+			
+			//로그기록,상태코드반환 또는 에러페이지 전달
+			String error = e.getMessage();
+			if (error.equals("resultError_idnotFound")) {
+				return "redirect:/login.do";
+			}
+			return "error/error";
+		}
+		return "main/main";
+	}
+	
+	@RequestMapping(value="/logout.do")
+	public String logout(HttpServletRequest request,ModelMap model)
+	{
+		System.out.println(request.getSession().getAttribute("myid").toString());
+		request.getSession().invalidate();
+		System.out.println(","+request.getSession().getAttribute("myid").toString());
+		return "login/login";
+	}
+
+	
 }

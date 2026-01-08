@@ -8,4 +8,6 @@ public interface MainService {
 
 	HashMap<String, Object> selectMain(HttpServletRequest request)throws Exception;
 
+	HashMap<String, Object> checkLogin(HttpServletRequest request)throws Exception;
+
 }

@@ -9,4 +9,5 @@ public interface MainMapper {
 
 	HashMap<String, Object> selectMain(HashMap<String, Object> paramMap)throws Exception;
 
+	HashMap<String, Object> checkLogin(HashMap<String, Object> paramMap)throws Exception;
 }

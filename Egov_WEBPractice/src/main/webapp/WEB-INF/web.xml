@@ -57,6 +57,11 @@
 	<login-config>
 		<auth-method>BASIC</auth-method>
 	</login-config>
+	
+	<!-- 로그인 세션 수명 -->
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
     
 	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>
