@@ -7,6 +7,7 @@
 	SELECT USERID,USERPW
 	FROM TBL_USER
 	WHERE USERID='testt'
+	
 	</select>
 	<select id="checkLogin" statementType="CALLABLE" parameterType="java.util.HashMap">
 	    { call SP_MYPROC(

@@ -37,7 +37,21 @@ public class BoardController {
 	@RequestMapping(value="/boardInsert.do")
 	public String boardInsert(HttpServletRequest request,ModelMap model)
 	{
-		
-		return "main/main2";
+		HashMap<String,Object> resultMap = new HashMap<String,Object>();
+		try {
+			boardService.saveBoard(request);
+		} catch (Exception e) {
+			
+			//로그기록,상태코드반환 또는 에러페이지 전달
+			String error = e.getMessage();
+			if (error.equals("No_Login")) {
+				return "redirect:/login.do";
+			}
+			else if(error.equals("Long_Title")){
+				return "redirect:/boardwrite.do";
+			}
+			return "error/error";
+		}
+		return "board/boardwrite";
 	}
 }
