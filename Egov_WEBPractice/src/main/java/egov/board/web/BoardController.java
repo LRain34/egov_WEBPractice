@@ -54,4 +54,31 @@ public class BoardController {
 		}
 		return "board/boardwrite";
 	}
+	
+	@RequestMapping(value="/boardView.do")
+	public String boardView(HttpServletRequest request,ModelMap model)
+	{
+		HashMap<String,Object> resultMap = new HashMap<String,Object>();
+		try {
+			resultMap = boardService.showBoard(request);
+		} catch (Exception e) {
+			
+			//로그기록,상태코드반환 또는 에러페이지 전달
+			String error = e.getMessage();
+			if (error.equals("No_Login")) {
+				return "redirect:/login.do";
+			}
+			else if(error.equals("No_valid")){
+				return "redirect:/boardlist.do";
+			}
+			else if(error.equals("resultError_idnotFound")){
+				return "redirect:/boardlist.do";	
+			}
+			return "error/error";
+		}
+		model.addAttribute("userid", resultMap.get("userId").toString());
+		model.addAttribute("title", resultMap.get("title").toString());
+		model.addAttribute("boardcontents", resultMap.get("boardContents").toString());
+		return "board/boardview";
+	}
 }

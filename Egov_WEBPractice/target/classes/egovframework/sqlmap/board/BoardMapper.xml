@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egov.board.dao.BoardMapper">
+
+	<!-- 글 저장 -->
+	<select id="saveBoard" statementType="CALLABLE" parameterType="java.util.HashMap">
+	    { call SP_SAVEBOARD(
+	        #{in_userid, mode=IN, jdbcType=VARCHAR},
+	        #{in_content, mode=IN, jdbcType=VARCHAR},
+	        #{in_title, mode=IN, jdbcType=VARCHAR},
+	        #{out_state, mode=OUT, jdbcType=INTEGER}
+	    )}
+	</select>
+	
+	<!-- 글 조회 -->
+	<select id="showBoard" statementType="CALLABLE" parameterType="java.util.HashMap">
+	    { call SP_SHOWBOARD(
+	        #{in_brdid, mode=IN, jdbcType=INTEGER},
+	        #{out_state, mode=OUT, jdbcType=INTEGER},
+	        #{REF_CURSOR, mode=OUT, jdbcType=CURSOR, resultMap=boardResultMap}
+	    )}
+	</select>
+	
+	<resultMap id="boardResultMap" type="java.util.HashMap">
+	    <result property="writerIp" column="WRITERIP"/>
+	    <result property="userId" column="USERID"/>
+	    <result property="updUserId" column="UPDUSERID"/>
+	    <result property="updIp" column="UPDIP"/>
+	    <result property="title" column="TITLE"/>
+	    <result property="seeCount" column="SEECOUNT"/>
+	    <result property="replyCount" column="REPLYCOUNT"/>
+	    <result property="parentId" column="PARENTID"/>
+	    <result property="nickname" column="NICKNAME"/>
+	    <result property="groupTab" column="GROUP_TAB"/>
+	    <result property="groupOrder" column="GROUP_ORDER"/>
+	    <result property="groupNum" column="GROUP_NUM"/>
+	    <result property="fileUrl" column="FILEURL"/>
+	    <result property="fileType" column="FILETYPE"/>
+	    <result property="fileName" column="FILENAME"/>
+	    <result property="boardType" column="BOARDTYPE"/>
+	    <result property="boardId" column="BOARDID"/>
+	    <result property="boardContents" column="BOARDCONTENTS" 
+	            jdbcType="CLOB" javaType="string"/>
+	</resultMap>
+</mapper>

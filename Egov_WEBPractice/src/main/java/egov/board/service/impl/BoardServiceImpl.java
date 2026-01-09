@@ -1,12 +1,15 @@
 package egov.board.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
+
+import com.lib.util.Validation_Form;
 
 import egov.board.dao.BoardMapper;
 import egov.board.service.BoardService;
@@ -53,5 +56,47 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	        e.printStackTrace();
 	        throw e;
 	    }
+	}
+
+	@Override
+	public HashMap<String, Object> showBoard(HttpServletRequest request) throws Exception {	    
+	    if (request.getSession().getAttribute("myid") == null) {
+			throw new Exception("No_Login");
+		}
+	    
+		String brdid = request.getParameter("brdid");
+	    boolean validNumber = false;
+	    validNumber = Validation_Form.validNum(brdid);
+	    
+	    if (validNumber == false) {
+	    	throw new Exception("No_valid");
+		}
+	    
+	    HashMap<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("in_brdid", brdid);
+	    paramMap.put("out_state", 0);
+	    
+	    try {
+	        boardMapper.showBoard(paramMap);
+	    } catch (Exception e) {
+	        System.out.println("DB 호출 중 에러: " + e.getMessage());
+	        e.printStackTrace();
+	        throw e;
+	    }
+	    
+	    
+	    // OUT_STATE 체크
+	    if ((Integer)paramMap.get("out_state") != 0) {
+	        throw new Exception("resultError_idnotFound");
+	    }	
+
+	    List<HashMap<String, Object>> list =
+	            (List<HashMap<String, Object>>) paramMap.get("REF_CURSOR");
+
+	    if (list == null || list.isEmpty()) {
+	        throw new Exception("resultError_idnotFound");
+	    }
+
+	    return list.get(0);
 	}
 }
