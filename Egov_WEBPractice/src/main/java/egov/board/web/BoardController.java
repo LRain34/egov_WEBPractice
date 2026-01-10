@@ -1,5 +1,6 @@
 package egov.board.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.annotation.Resource;
@@ -76,9 +77,35 @@ public class BoardController {
 			}
 			return "error/error";
 		}
-		model.addAttribute("userid", resultMap.get("userId").toString());
+		model.addAttribute("userid", resultMap.get("userid").toString());
 		model.addAttribute("title", resultMap.get("title").toString());
-		model.addAttribute("boardcontents", resultMap.get("boardContents").toString());
+		model.addAttribute("boardcontents", resultMap.get("boardcontents").toString());
 		return "board/boardview";
+	}
+	
+	@RequestMapping(value="/boardList.do")
+	public String boardList(HttpServletRequest request,ModelMap model)
+	{
+		ArrayList<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
+		try {
+			list = boardService.showBoardList(request);
+		} catch (Exception e) {
+			
+			//로그기록,상태코드반환 또는 에러페이지 전달
+			String error = e.getMessage();
+			if (error.equals("No_Login")) {
+				return "redirect:/login.do";
+			}
+			else if(error.equals("No_valid")){
+				return "redirect:/boardlist.do";
+			}
+			else if(error.equals("resultError_idnotFound")){
+				return "redirect:/boardlist.do";	
+			}
+			return "error/error";
+		}
+		model.addAttribute("boardlist",list);
+		
+		return "board/boardlist";
 	}
 }

@@ -1,5 +1,6 @@
 package egov.board.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
@@ -10,5 +11,7 @@ public interface BoardMapper {
 	void saveBoard(HashMap<String, Object> paramMap)throws Exception;
 
 	void showBoard(HashMap<String, Object> paramMap)throws Exception;
+
+	void showBoardList(HashMap<String, Object> paramMap)throws Exception;
 
 }

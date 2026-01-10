@@ -18,8 +18,8 @@
 	    )}
 	</select>
 	
-	<resultMap id="userResultMap" type="java.util.HashMap">
-	    <result column="USERID" property="USERID"/>
-	    <result column="USERPW" property="USERPW"/>
+	<resultMap id="userResultMap" type="com.lib.model.UserVO">
+	    <result column="USERID" property="userid"/>
+	    <result column="USERPW" property="userpw"/>
 	</resultMap>
 </mapper>

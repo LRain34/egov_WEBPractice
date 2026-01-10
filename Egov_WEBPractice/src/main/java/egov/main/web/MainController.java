@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lib.model.UserVO;
+
 import egov.main.service.MainService;
 
 @Controller
@@ -91,8 +93,8 @@ public class MainController {
 		try {
 			resultMap= mainService.checkLogin(request);
 			// 로그인 상태 유지를 위한 세션 얻기
-			request.getSession().setAttribute("myid", resultMap.get("USERID").toString());
-			model.addAttribute("serverId", resultMap.get("USERID").toString());
+			request.getSession().setAttribute("uservo", resultMap.get("uservo"));
+			model.addAttribute("serverId", ((UserVO)resultMap.get("uservo")).getUserid());
 		} catch (Exception e) {
 			
 			//로그기록,상태코드반환 또는 에러페이지 전달

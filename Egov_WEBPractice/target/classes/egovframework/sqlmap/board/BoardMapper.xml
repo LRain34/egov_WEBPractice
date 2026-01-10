@@ -21,25 +21,34 @@
 	    )}
 	</select>
 	
+	<!-- 글 목록 조회 -->
+	<select id="showBoardList" statementType="CALLABLE" parameterType="java.util.HashMap">
+	    { call SP_SHOWBOARDLIST(
+	        #{out_state, mode=OUT, jdbcType=INTEGER},
+	        #{REF_CURSOR, mode=OUT, jdbcType=CURSOR, resultMap=boardResultMap}
+	    )}
+	</select>
+	
 	<resultMap id="boardResultMap" type="java.util.HashMap">
-	    <result property="writerIp" column="WRITERIP"/>
-	    <result property="userId" column="USERID"/>
-	    <result property="updUserId" column="UPDUSERID"/>
-	    <result property="updIp" column="UPDIP"/>
+	    <result property="writerip" column="WRITERIP"/>
+	    <result property="userid" column="USERID"/>
+	    <result property="upduserid" column="UPDUSERID"/>
+	    <result property="updip" column="UPDIP"/>
 	    <result property="title" column="TITLE"/>
-	    <result property="seeCount" column="SEECOUNT"/>
-	    <result property="replyCount" column="REPLYCOUNT"/>
-	    <result property="parentId" column="PARENTID"/>
+	    <result property="seecount" column="SEECOUNT"/>
+	    <result property="replycount" column="REPLYCOUNT"/>
+	    <result property="parentid" column="PARENTID"/>
 	    <result property="nickname" column="NICKNAME"/>
-	    <result property="groupTab" column="GROUP_TAB"/>
-	    <result property="groupOrder" column="GROUP_ORDER"/>
-	    <result property="groupNum" column="GROUP_NUM"/>
-	    <result property="fileUrl" column="FILEURL"/>
-	    <result property="fileType" column="FILETYPE"/>
-	    <result property="fileName" column="FILENAME"/>
-	    <result property="boardType" column="BOARDTYPE"/>
-	    <result property="boardId" column="BOARDID"/>
-	    <result property="boardContents" column="BOARDCONTENTS" 
+	    <result property="grouptab" column="GROUP_TAB"/>
+	    <result property="grouporder" column="GROUP_ORDER"/>
+	    <result property="groupnum" column="GROUP_NUM"/>
+	    <result property="fileurl" column="FILEURL"/>
+	    <result property="filetype" column="FILETYPE"/>
+	    <result property="filename" column="FILENAME"/>
+	    <result property="boardtype" column="BOARDTYPE"/>
+	    <result property="boardid" column="BOARDID"/>
+	    <result property="boardcontents" column="BOARDCONTENTS" 
 	            jdbcType="CLOB" javaType="string"/>
+	    <result property="writetime" column="WRITETIME"/>
 	</resultMap>
 </mapper>

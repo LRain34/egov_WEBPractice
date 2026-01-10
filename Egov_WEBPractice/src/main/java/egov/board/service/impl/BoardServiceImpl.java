@@ -1,5 +1,6 @@
 package egov.board.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 
+import com.lib.model.UserVO;
 import com.lib.util.Validation_Form;
 
 import egov.board.dao.BoardMapper;
@@ -23,7 +25,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	@Override
 	public void checkUser(HttpServletRequest request) throws Exception {
 		
-		if (request.getSession().getAttribute("myid") == null) {
+		if (request.getSession().getAttribute("uservo") == null) {
 			throw new Exception("No_Login");
 		}
 	}
@@ -31,7 +33,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	@Override
 	public void saveBoard(HttpServletRequest request) throws Exception {
 		
-		if (request.getSession().getAttribute("myid") == null) {
+		if (request.getSession().getAttribute("uservo") == null) {
 			throw new Exception("No_Login");
 		}
 		String title = request.getParameter("title");
@@ -44,7 +46,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	    HashMap<String, Object> paramMap = new HashMap<>();
 	    paramMap.put("in_title", title);
 	    paramMap.put("in_content", content);
-	    paramMap.put("in_userid", request.getSession().getAttribute("myid"));
+	    paramMap.put("in_userid", ((UserVO)request.getSession().getAttribute("uservo")).getUserid());
 	    paramMap.put("out_state", 2);
 	    
 	    try {
@@ -60,7 +62,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 
 	@Override
 	public HashMap<String, Object> showBoard(HttpServletRequest request) throws Exception {	    
-	    if (request.getSession().getAttribute("myid") == null) {
+	    if (request.getSession().getAttribute("uservo") == null) {
 			throw new Exception("No_Login");
 		}
 	    
@@ -98,5 +100,31 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	    }
 
 	    return list.get(0);
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> showBoardList(HttpServletRequest request) throws Exception {
+		if (request.getSession().getAttribute("uservo") == null) {
+			throw new Exception("No_Login");
+		}
+	    
+	    HashMap<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("out_state", 0);
+	   
+	    boardMapper.showBoardList(paramMap);
+	    
+	    ArrayList<HashMap<String, Object>> list = 
+	            (ArrayList<HashMap<String, Object>>) paramMap.get("REF_CURSOR");
+	    
+	    // OUT_STATE 체크
+	    if ((Integer)paramMap.get("out_state") != 0) {
+	        throw new Exception("resultError_idnotFound");
+	    }	
+
+	    if (list == null || list.isEmpty()) {
+	        throw new Exception("resultError_idnotFound");
+	    }
+	    
+	    return list;
 	}
 }

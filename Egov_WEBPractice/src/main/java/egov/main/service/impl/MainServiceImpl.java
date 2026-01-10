@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 
+import com.lib.model.UserVO;
+
 import egov.main.dao.MainMapper;
 import egov.main.service.MainService;
 
@@ -40,7 +42,7 @@ public class MainServiceImpl extends EgovAbstractServiceImpl implements MainServ
 	    HashMap<String, Object> paramMap = new HashMap<>();
 	    paramMap.put("IN_USERID", userid);
 	    paramMap.put("IN_USERPW", userpw);
-	    paramMap.put("OUT_STATE", -1);
+	    paramMap.put("OUT_STATE", 0);
 	    
 	    System.out.println("Service paramMap BEFORE = " + paramMap);
 	    mainMapper.checkLogin(paramMap);
@@ -53,14 +55,19 @@ public class MainServiceImpl extends EgovAbstractServiceImpl implements MainServ
 	        throw new Exception("resultError_idnotFound");
 	    }
 
-	    List<HashMap<String, Object>> list =
-	            (List<HashMap<String, Object>>) paramMap.get("REF_CURSOR");
+	    List<UserVO> list =
+	    	    (List<UserVO>) paramMap.get("REF_CURSOR");
 
-	    if (list == null || list.isEmpty()) {
-	        throw new Exception("resultError_idnotFound");
-	    }
-
-	    return list.get(0);
+    	if (list == null || list.isEmpty()) {
+    	    throw new Exception("resultError_idnotFound");
+    	}
+    	
+    	UserVO userVO = list.get(0);
+    	
+    	HashMap<String, Object> resultMap = new HashMap();
+    	resultMap.put("uservo", userVO);
+    	
+    	return resultMap;
 	}
 
 }
