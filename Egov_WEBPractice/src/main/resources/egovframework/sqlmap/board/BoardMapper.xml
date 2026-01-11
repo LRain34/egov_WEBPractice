@@ -24,6 +24,9 @@
 	<!-- 글 목록 조회 -->
 	<select id="showBoardList" statementType="CALLABLE" parameterType="java.util.HashMap">
 	    { call SP_SHOWBOARDLIST(
+	   	    #{pi_offset, mode=IN, jdbcType=INTEGER},
+	   	    #{pi_recordCountPerPage, mode=IN, jdbcType=INTEGER},
+	   	    #{out_listcount, mode=OUT, jdbcType=INTEGER},
 	        #{out_state, mode=OUT, jdbcType=INTEGER},
 	        #{REF_CURSOR, mode=OUT, jdbcType=CURSOR, resultMap=boardResultMap}
 	    )}

@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.stereotype.Service;
 
 import com.lib.model.UserVO;
@@ -108,13 +109,36 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 			throw new Exception("No_Login");
 		}
 	    
+		String pageNo = request.getParameter("pageNo");
+	    if(pageNo == null || pageNo.equals("")) {
+	        pageNo = "1";
+	    }
+	    
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(Integer.parseInt(pageNo));
+		
+		paginationInfo.setPageSize(10);
+		
+		paginationInfo.setRecordCountPerPage(10);
+		
 	    HashMap<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("pi_offset", (paginationInfo.getCurrentPageNo()-1)*paginationInfo.getRecordCountPerPage());
+	    paramMap.put("pi_recordCountPerPage", paginationInfo.getRecordCountPerPage());
+	    paramMap.put("out_listcount", 0);
 	    paramMap.put("out_state", 0);
 	   
 	    boardMapper.showBoardList(paramMap);
-	    
+	    System.out.println("pageNo = " + pageNo);
+	    System.out.println("offset = " + paramMap.get("pi_offset"));
+	    System.out.println("recordCount = " + paramMap.get("pi_recordCountPerPage"));
+	    System.out.println("paramMap keys = " + paramMap.keySet());
+	    System.out.println("out_listcount = " + paramMap.get("out_listcount"));
+	    System.out.println("out_state = " + paramMap.get("out_state"));
 	    ArrayList<HashMap<String, Object>> list = 
 	            (ArrayList<HashMap<String, Object>>) paramMap.get("REF_CURSOR");
+	    
+	    int listCount = Integer.parseInt(paramMap.get("out_listcount").toString());
+	    paginationInfo.setTotalRecordCount(listCount);
 	    
 	    // OUT_STATE 체크
 	    if ((Integer)paramMap.get("out_state") != 0) {
@@ -124,6 +148,12 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	    if (list == null || list.isEmpty()) {
 	        throw new Exception("resultError_idnotFound");
 	    }
+	    
+	    HashMap<String, Object> resultMap = new HashMap<String,Object>();
+	    resultMap.put("paginationInfo", paginationInfo);
+	    resultMap.put("listCount", listCount);
+	    
+	    list.add(resultMap);
 	    
 	    return list;
 	}
